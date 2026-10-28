@@ -1,0 +1,22 @@
+<Window x:Class="SoleKey.Views.AccountEditWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:SoleKey.Views" Style="{StaticResource DialogWindow}" Title="SoleKey · 계정 편집" Width="780" Height="760" MinWidth="660" MinHeight="540" WindowStartupLocation="CenterOwner">
+  <DockPanel Margin="22">
+    <StackPanel DockPanel.Dock="Bottom"><TextBlock Text="{Binding Status}" Style="{StaticResource Status}"/>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"><Button Content="저장" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}"/><Button Content="취소" Command="{Binding CancelCommand}"/></StackPanel>
+    </StackPanel>
+    <Border Style="{StaticResource Card}" Padding="22"><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel IsEnabled="{Binding Ready}">
+      <TextBlock Text="계정 정보" Style="{StaticResource Heading}"/>
+      <TextBlock Text="사용처"/><TextBox Text="{Binding Draft.ServiceName, UpdateSourceTrigger=PropertyChanged}" MaxLength="200" AutomationProperties.Name="사용처"/>
+      <CheckBox Content="ID 사용" IsChecked="{Binding Draft.UseLoginId}"/>
+      <TextBox Text="{Binding Draft.LoginId, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Draft.UseLoginId}" MaxLength="1000" AutomationProperties.Name="ID"/>
+      <DockPanel Margin="0,12,0,0"><Button DockPanel.Dock="Right" Content="+" Style="{StaticResource AddButton}" Command="{Binding AddPasswordCommand}" AutomationProperties.Name="비밀번호 행 추가"/><TextBlock Text="비밀번호" Style="{StaticResource SectionTitle}"/></DockPanel>
+      <ItemsControl x:Name="PasswordRows" ItemsSource="{Binding Draft.Passwords}"><ItemsControl.ItemTemplate><DataTemplate>
+        <Grid Margin="0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="125"/><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+          <TextBox Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" MaxLength="100" Margin="0,4,8,4" AutomationProperties.Name="비밀번호 이름"/>
+          <local:SecretInput Grid.Column="1" Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          <Button Grid.Column="2" Content="삭제" Style="{StaticResource DangerButton}" Command="{Binding DataContext.RemovePasswordCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" AutomationProperties.Name="비밀번호 행 삭제"/>
+        </Grid>
+      </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+      <TextBlock Text="메모" Margin="0,18,0,0"/><TextBox Text="{Binding Draft.Memo, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" MinHeight="130" MaxHeight="280" VerticalScrollBarVisibility="Auto" MaxLength="50000" AutomationProperties.Name="메모"/>
+    </StackPanel></ScrollViewer></Border>
+  </DockPanel>
+</Window>

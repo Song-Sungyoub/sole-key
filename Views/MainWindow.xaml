@@ -1,0 +1,48 @@
+<Window x:Class="SoleKey.Views.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:SoleKey.Views" Style="{StaticResource SoleWindow}" Title="SoleKey" Width="1120" Height="790" MinWidth="900" MinHeight="600" WindowStartupLocation="CenterScreen">
+  <DockPanel x:Name="MainContent" Margin="18">
+    <Border DockPanel.Dock="Top" Style="{StaticResource Card}" Padding="16,12" Margin="0,0,0,14">
+      <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+        <StackPanel><TextBlock Text="내 금고" FontSize="20" FontWeight="SemiBold"/><TextBlock Text="계정과 비밀번호를 한곳에 안전하게 보관하세요." Style="{StaticResource MutedText}" Margin="0,5,0,0"/></StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center"><Button Content="+ 계정 추가" Command="{Binding AddCommand}" Style="{StaticResource PrimaryButton}"/><Button Content="금고 관리" Command="{Binding SettingsCommand}" Margin="8,3,3,3"/><Button Content="잠금" Command="{Binding LockCommand}"/></StackPanel>
+      </Grid>
+    </Border>
+    <Grid DockPanel.Dock="Bottom" Margin="3,14,3,0"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition/></Grid.ColumnDefinitions>
+      <TextBlock Text="{Binding CountText}" Style="{StaticResource MutedText}" VerticalAlignment="Center"/>
+      <TextBlock Grid.Column="1" Text="{Binding Status}" Style="{StaticResource Status}" HorizontalAlignment="Right" Margin="16,0,0,0" AutomationProperties.LiveSetting="Polite"/>
+    </Grid>
+    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="320"/><ColumnDefinition Width="14"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+      <Border Style="{StaticResource Card}" Padding="10,14,10,10"><DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="계정 목록" FontWeight="SemiBold" Margin="8,0,0,10"/>
+        <TextBlock DockPanel.Dock="Top" Text="사용처 · ID · 메모 검색" Style="{StaticResource MutedText}" Margin="8,0,0,4"/>
+        <TextBox DockPanel.Dock="Top" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" ToolTip="사용처·ID·메모 검색" AutomationProperties.Name="사용처 ID 메모 검색" Margin="4,0,4,12"/>
+        <Grid><ListView ItemsSource="{Binding FilteredEntries}" SelectedItem="{Binding Selected}" AutomationProperties.Name="계정 목록">
+          <ListView.View><GridView><GridViewColumn Header="사용처" Width="140"><GridViewColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding ServiceName}" TextTrimming="CharacterEllipsis"/></DataTemplate></GridViewColumn.CellTemplate></GridViewColumn><GridViewColumn Header="ID" Width="118"><GridViewColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding DisplayId}" TextTrimming="CharacterEllipsis"/></DataTemplate></GridViewColumn.CellTemplate></GridViewColumn></GridView></ListView.View>
+        </ListView>
+        <TextBlock Text="{Binding EmptyMessage}" TextAlignment="Center" Style="{StaticResource MutedText}" Margin="16" VerticalAlignment="Center" Visibility="{Binding FilteredEntries.IsEmpty, Converter={StaticResource BoolVisibility}}"/></Grid>
+      </DockPanel></Border>
+      <Border Grid.Column="2" Style="{StaticResource Card}" Padding="24">
+        <Grid>
+          <TextBlock Text="계정을 선택하거나 추가하세요." VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource MutedText}"><Style.Triggers><DataTrigger Binding="{Binding HasSelection}" Value="True"><Setter Property="Visibility" Value="Collapsed"/></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+          </TextBlock>
+          <ScrollViewer VerticalScrollBarVisibility="Auto" Visibility="{Binding HasSelection, Converter={StaticResource BoolVisibility}}">
+            <StackPanel>
+              <TextBlock Text="계정 정보" Style="{StaticResource MutedText}" Margin="0,0,0,6"/>
+              <TextBlock Text="{Binding Selected.ServiceName}" Style="{StaticResource Heading}" TextWrapping="Wrap"/>
+              <Border Background="{DynamicResource ControlBrush}" CornerRadius="8" Padding="12,10" Margin="0,0,0,20"><DockPanel><Button DockPanel.Dock="Right" Content="ID 복사" Command="{Binding CopyIdCommand}" Background="{DynamicResource SurfaceBrush}"/><StackPanel VerticalAlignment="Center"><TextBlock Text="ID" Style="{StaticResource MutedText}" Margin="0,0,0,5"/><TextBlock Text="{Binding Selected.DisplayId}" TextWrapping="Wrap"/></StackPanel></DockPanel></Border>
+              <DockPanel><Button DockPanel.Dock="Right" Content="+" Style="{StaticResource AddButton}" Command="{Binding AppendPasswordCommand}" AutomationProperties.Name="비밀번호 추가"/><TextBlock Text="비밀번호" Style="{StaticResource SectionTitle}"/></DockPanel>
+              <ItemsControl ItemsSource="{Binding Selected.Passwords}"><ItemsControl.ItemTemplate><DataTemplate>
+                <Border Background="{DynamicResource ControlBrush}" CornerRadius="8" Padding="12,10" Margin="0,8,0,0"><StackPanel><TextBlock Text="{Binding Label}" Style="{StaticResource MutedText}" Margin="0,0,0,4"/>
+                  <DockPanel><Button DockPanel.Dock="Right" Content="복사" Background="{DynamicResource SurfaceBrush}" Command="{Binding DataContext.CopyPasswordCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"/><local:SecretInput Value="{Binding Value, Mode=OneWay}" ReadOnly="True"/></DockPanel>
+                </StackPanel></Border>
+              </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+              <TextBlock Text="메모" Margin="0,22,0,10" Style="{StaticResource SectionTitle}"/>
+              <TextBlock Text="{Binding Selected.Memo}" TextWrapping="Wrap" LineHeight="22"/>
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,22,0,0"><Button Content="수정" Command="{Binding EditCommand}"/><Button Content="삭제" Style="{StaticResource DangerButton}" Command="{Binding DeleteCommand}"/></StackPanel>
+            </StackPanel>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+    </Grid>
+  </DockPanel>
+</Window>

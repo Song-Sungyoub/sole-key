@@ -1,0 +1,9 @@
+<Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="256" Height="256">
+  <Canvas Width="256" Height="256">
+    <Rectangle Canvas.Left="12" Canvas.Top="12" Width="232" Height="232" RadiusX="54" RadiusY="54" Stroke="#5086EF" StrokeThickness="2">
+      <Rectangle.Fill><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#408CF4" Offset="0"/><GradientStop Color="#225BCB" Offset="0.55"/><GradientStop Color="#193F9B" Offset="1"/></LinearGradientBrush></Rectangle.Fill>
+    </Rectangle>
+    <Path Data="M 111,111 L 185,185 M 149,149 L 165,133 M 174,174 L 190,158" Stroke="White" StrokeThickness="20" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+    <Ellipse Canvas.Left="56" Canvas.Top="56" Width="76" Height="76" Fill="#77E8D1" Stroke="White" StrokeThickness="19"/>
+  </Canvas>
+</Viewbox>

@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <Product>SoleKey</Product>
+    <Description>로컬 암호화 계정·비밀번호 금고</Description>
+    <DefaultItemExcludes>$(DefaultItemExcludes);artifacts/**;dist/**;Installer/**</DefaultItemExcludes>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <Company>Soletop</Company>
+    <ApplicationIcon>Assets/Icon/SoleKey.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
+    <Compile Remove="Checks/**/*.cs" />
+    <Page Remove="Checks/**/*.xaml" />
+    <None Update="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
+    <Resource Include="Assets/Fonts/Pretendard-Regular.ttf" />
+    <Resource Include="Assets/Icon/SoleKey.ico" />
+    <Resource Include="Assets/Icon/SoleKey-64.png" />
+    <None Update="Assets/Fonts/OFL.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

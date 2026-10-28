@@ -1,0 +1,24 @@
+<Window x:Class="SoleKey.Views.UnlockWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:SoleKey.Views" Title="SoleKey · 금고 열기" Width="560" MinWidth="500" MinHeight="600" WindowStartupLocation="CenterScreen">
+  <Window.Style><Style TargetType="Window" BasedOn="{StaticResource SoleWindow}"><Setter Property="Height" Value="700"/><Style.Triggers><DataTrigger Binding="{Binding Create}" Value="True"><Setter Property="Height" Value="800"/></DataTrigger></Style.Triggers></Style></Window.Style>
+  <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="26,18,26,24">
+    <local:UnlockAnimation x:Name="UnlockMotion" Phase="{Binding Phase}" Margin="0,0,0,8"/>
+    <TextBlock Text="SoleKey" FontSize="25" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,18"/>
+    <Border Style="{StaticResource Card}" Padding="22"><StackPanel>
+      <StackPanel IsEnabled="{Binding Ready}">
+        <CheckBox Content="새 금고 만들기" IsChecked="{Binding Create}" Margin="0,0,0,16"/>
+        <TextBlock Text="금고 파일"/>
+        <DockPanel><Button DockPanel.Dock="Right" Content="찾아보기" Command="{Binding BrowseCommand}" Margin="8,4,0,4"/><TextBox Text="{Binding FilePath, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="금고 파일 경로"/></DockPanel>
+        <DockPanel Margin="0,12,0,0"><TextBlock DockPanel.Dock="Right" Text="15~128자" Style="{StaticResource MutedText}" Visibility="{Binding Create, Converter={StaticResource BoolVisibility}}"/><TextBlock Text="마스터 비밀번호"/></DockPanel>
+        <local:SecretInput Value="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <StackPanel Visibility="{Binding Create, Converter={StaticResource BoolVisibility}}">
+          <TextBlock Text="비밀번호 확인" Margin="0,12,0,0"/><local:SecretInput Value="{Binding Confirmation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBlock Text="분실한 마스터 비밀번호는 복구할 수 없습니다." Style="{StaticResource MutedText}" Margin="0,8"/>
+        </StackPanel>
+        <Button Command="{Binding OpenCommand}" IsDefault="True" Margin="0,18,0,0"><Button.Style><Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+          <Setter Property="Content" Value="잠금 해제"/><Style.Triggers><DataTrigger Binding="{Binding Create}" Value="True"><Setter Property="Content" Value="새 금고 만들기"/></DataTrigger><DataTrigger Binding="{Binding Busy}" Value="True"><Setter Property="Content" Value="처리 중…"/></DataTrigger></Style.Triggers>
+        </Style></Button.Style></Button>
+      </StackPanel>
+      <TextBlock Text="{Binding Status}" TextWrapping="Wrap" FontSize="13" Margin="0,10,0,0" AutomationProperties.LiveSetting="Polite"><TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource Status}"><Style.Triggers><DataTrigger Binding="{Binding HasError}" Value="True"><Setter Property="Foreground" Value="{DynamicResource DangerBrush}"/></DataTrigger></Style.Triggers></Style></TextBlock.Style></TextBlock>
+    </StackPanel></Border>
+  </StackPanel></ScrollViewer>
+</Window>

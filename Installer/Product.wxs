@@ -1,0 +1,50 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+ <Package Name="SoleKey" Manufacturer="Soletop" Version="$(var.ProductVersion)" UpgradeCode="BAB2BB58-4B91-4F8A-B20C-78DE6C3AAB5E" Scope="perUser" Language="1042" Codepage="949">
+  <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="더 최신 버전의 SoleKey가 이미 설치되어 있습니다."/>
+  <MediaTemplate EmbedCab="yes" CompressionLevel="high"/>
+  <Icon Id="AppIcon" SourceFile="$(var.ProjectRoot)\Assets\Icon\SoleKey.ico"/>
+  <Binary Id="AppIcon" SourceFile="$(var.ProjectRoot)\Assets\Icon\SoleKey.ico"/>
+  <Property Id="ARPPRODUCTICON" Value="AppIcon"/><Property Id="ARPNOMODIFY" Value="1"/>
+  <Property Id="LAUNCHAPP" Value="1"/>
+  <StandardDirectory Id="LocalAppDataFolder"><Directory Id="ProgramsFolder" Name="Programs"><Directory Id="INSTALLFOLDER" Name="SoleKey"/></Directory></StandardDirectory>
+  <StandardDirectory Id="ProgramMenuFolder"><Directory Id="MenuFolder" Name="SoleKey"/></StandardDirectory>
+  <StandardDirectory Id="DesktopFolder"/>
+  <Feature Id="MainFeature" Title="SoleKey" Level="1"><ComponentGroupRef Id="Payload"/><ComponentRef Id="Shortcuts"/></Feature>
+  <Component Id="Shortcuts" Directory="MenuFolder" Guid="3A8294F2-E2D4-4EE9-B5EF-CE5FFAA93404">
+   <Shortcut Id="MenuLink" Name="SoleKey" Target="[INSTALLFOLDER]SoleKey.exe" WorkingDirectory="INSTALLFOLDER" Icon="AppIcon"/>
+   <Shortcut Id="DesktopLink" Directory="DesktopFolder" Name="SoleKey" Target="[INSTALLFOLDER]SoleKey.exe" WorkingDirectory="INSTALLFOLDER" Icon="AppIcon"/>
+   <RemoveFolder Id="RemoveMenuFolder" On="uninstall"/>
+   <RegistryValue Root="HKCU" Key="Software\Soletop\SoleKey\Installer" Name="Shortcuts" Type="integer" Value="1" KeyPath="yes"/>
+  </Component>
+  <CustomAction Id="LaunchApp" FileRef="AppExe" ExeCommand="" Return="asyncNoWait" Impersonate="yes"/>
+  <UI>
+   <TextStyle Id="Normal" FaceName="맑은 고딕" Size="9"/><TextStyle Id="Heading" FaceName="맑은 고딕" Size="16" Bold="yes"/>
+   <Property Id="DefaultUIFont" Value="Normal"/><UIRef Id="WixUI_Common"/>
+   <DialogRef Id="FatalError"/><DialogRef Id="UserExit"/><DialogRef Id="ErrorDlg"/><DialogRef Id="FilesInUse"/><DialogRef Id="MsiRMFilesInUse"/>
+   <Dialog Id="Welcome" Width="390" Height="280" Title="SoleKey 설치">
+    <Control Id="Icon" Type="Icon" X="22" Y="22" Width="40" Height="40" Text="AppIcon" FixedSize="yes" IconSize="48"/>
+    <Control Id="Title" Type="Text" X="78" Y="26" Width="290" Height="30" Text="{\Heading}SoleKey 설치"/>
+    <Control Id="Body" Type="Text" X="24" Y="85" Width="342" Height="90" Text="계정과 비밀번호를 암호화해 보관하는 개인용 금고입니다.&#13;&#10;&#13;&#10;현재 사용자 계정에 설치하고 시작 메뉴와 바탕 화면에 바로가기를 추가합니다. .NET 런타임이 포함되어 있습니다."/>
+    <Control Id="Location" Type="Text" X="24" Y="181" Width="342" Height="35" Text="설치 위치: [INSTALLFOLDER]"/>
+    <Control Id="Line" Type="Line" X="0" Y="235" Width="390" Height="0"/>
+    <Control Id="Install" Type="PushButton" X="240" Y="250" Width="65" Height="20" Default="yes" Text="설치"><Publish Event="EndDialog" Value="Return"/></Control>
+    <Control Id="Cancel" Type="PushButton" X="315" Y="250" Width="60" Height="20" Cancel="yes" Text="취소"><Publish Event="EndDialog" Value="Exit"/></Control>
+   </Dialog>
+   <Dialog Id="Installing" Width="390" Height="280" Title="SoleKey 설치" Modeless="yes">
+    <Control Id="Title" Type="Text" X="24" Y="28" Width="340" Height="30" Text="{\Heading}설치 중입니다" TabSkip="no"/>
+    <Control Id="Body" Type="Text" X="24" Y="90" Width="340" Height="35" Text="완료될 때까지 잠시 기다려 주세요."/>
+    <Control Id="Progress" Type="ProgressBar" X="24" Y="142" Width="340" Height="15" ProgressBlocks="yes"><Subscribe Event="SetProgress" Attribute="Progress"/></Control>
+    <Control Id="Action" Type="Text" X="24" Y="168" Width="340" Height="40"><Subscribe Event="ActionText" Attribute="Text"/></Control>
+   </Dialog>
+   <Dialog Id="Completed" Width="390" Height="220" Title="SoleKey 설치 완료">
+    <Control Id="Title" Type="Text" X="24" Y="24" Width="340" Height="32" Text="{\Heading}설치가 완료되었습니다"/>
+    <Control Id="Body" Type="Text" X="24" Y="70" Width="340" Height="42" Text="시작 메뉴와 바탕 화면에 SoleKey가 추가되었습니다.&#13;&#10;금고 파일과 사용자 설정은 앱을 제거해도 유지됩니다."/>
+    <Control Id="Launch" Type="CheckBox" X="24" Y="126" Width="340" Height="20" Property="LAUNCHAPP" CheckBoxValue="1" Text="SoleKey 실행"/>
+    <Control Id="Finish" Type="PushButton" X="306" Y="185" Width="65" Height="20" Default="yes" Cancel="yes" Text="마침">
+     <Publish Event="DoAction" Value="LaunchApp" Condition="LAUNCHAPP = 1" Order="1"/><Publish Event="EndDialog" Value="Return" Order="2"/>
+    </Control>
+   </Dialog>
+  </UI>
+  <InstallUISequence><Show Dialog="Welcome" Before="Installing" Condition="NOT Installed"/><Show Dialog="Installing" Before="ExecuteAction"/><Show Dialog="Completed" OnExit="success" Condition="NOT Installed AND NOT REMOVE~=&quot;ALL&quot;"/></InstallUISequence>
+ </Package>
+</Wix>

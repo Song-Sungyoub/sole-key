@@ -1,0 +1,85 @@
+<UserControl x:Class="SoleKey.Views.UnlockAnimation" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Focusable="False" IsHitTestVisible="False" AutomationProperties.Name="금고 잠금 상태">
+  <UserControl.Resources>
+    <LinearGradientBrush x:Key="KeyMetal" StartPoint="0,0" EndPoint="0,1">
+      <GradientStop Color="#F8FBFF"/><GradientStop Color="#B3C5DF" Offset="0.35"/><GradientStop Color="White" Offset="0.48"/><GradientStop Color="#D5E1F1" Offset="0.65"/><GradientStop Color="#93ABCC" Offset="1"/>
+    </LinearGradientBrush>
+    <Storyboard x:Key="CheckingMotion">
+      <DoubleAnimationUsingKeyFrames Storyboard.TargetName="KeyMove" Storyboard.TargetProperty="X">
+        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+        <EasingDoubleKeyFrame KeyTime="0:0:0.24" Value="90"><EasingDoubleKeyFrame.EasingFunction><CubicEase EasingMode="EaseOut"/></EasingDoubleKeyFrame.EasingFunction></EasingDoubleKeyFrame>
+        <EasingDoubleKeyFrame KeyTime="0:0:0.32" Value="88"/>
+      </DoubleAnimationUsingKeyFrames>
+      <DoubleAnimation Storyboard.TargetName="VaultHalo" Storyboard.TargetProperty="Opacity" From="0.12" To="0.32" Duration="0:0:0.7" AutoReverse="True" RepeatBehavior="Forever"/>
+      <DoubleAnimation Storyboard.TargetName="KeyGlow" Storyboard.TargetProperty="Opacity" From="0.12" To="0.3" Duration="0:0:0.7" AutoReverse="True" RepeatBehavior="Forever"/>
+    </Storyboard>
+    <Storyboard x:Key="OpeningMotion">
+      <StringAnimationUsingKeyFrames Storyboard.TargetName="Caption" Storyboard.TargetProperty="Text"><DiscreteStringKeyFrame KeyTime="0:0:0.56" Value="금고가 열렸습니다."/></StringAnimationUsingKeyFrames>
+      <DoubleAnimation Storyboard.TargetName="KeyMove" Storyboard.TargetProperty="X" To="88" Duration="0:0:0.1"><DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+      <DoubleAnimation Storyboard.TargetName="KeyTurn" Storyboard.TargetProperty="ScaleY" From="1" To="0.55" BeginTime="0:0:0.1" Duration="0:0:0.13" AutoReverse="True"/>
+      <DoubleAnimation Storyboard.TargetName="KeyTilt" Storyboard.TargetProperty="Angle" From="0" To="-3" BeginTime="0:0:0.1" Duration="0:0:0.13" AutoReverse="True"/>
+      <DoubleAnimation Storyboard.TargetName="KeyShape" Storyboard.TargetProperty="Opacity" To="0" BeginTime="0:0:0.36" Duration="0:0:0.16"/>
+      <DoubleAnimation Storyboard.TargetName="DoorSwing" Storyboard.TargetProperty="ScaleX" From="1" To="0.13" BeginTime="0:0:0.36" Duration="0:0:0.38"><DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+      <DoubleAnimation Storyboard.TargetName="DoorSkew" Storyboard.TargetProperty="AngleY" From="0" To="-8" BeginTime="0:0:0.36" Duration="0:0:0.38"><DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+      <DoubleAnimation Storyboard.TargetName="OpenMark" Storyboard.TargetProperty="Opacity" From="0" To="1" BeginTime="0:0:0.56" Duration="0:0:0.22"/>
+      <DoubleAnimation Storyboard.TargetName="MarkScale" Storyboard.TargetProperty="ScaleX" From="0.85" To="1" BeginTime="0:0:0.56" Duration="0:0:0.22"><DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+      <DoubleAnimation Storyboard.TargetName="MarkScale" Storyboard.TargetProperty="ScaleY" From="0.85" To="1" BeginTime="0:0:0.56" Duration="0:0:0.22"><DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+      <DoubleAnimation Storyboard.TargetName="VaultHalo" Storyboard.TargetProperty="Opacity" From="0.32" To="0.15" BeginTime="0:0:0.56" Duration="0:0:0.28"/>
+      <DoubleAnimation Storyboard.TargetName="KeyGlow" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2"/>
+    </Storyboard>
+    <Storyboard x:Key="FailedMotion">
+      <DoubleAnimation Storyboard.TargetName="KeyMove" Storyboard.TargetProperty="X" To="0" Duration="0:0:0.35"><DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+      <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Shake" Storyboard.TargetProperty="X">
+        <EasingDoubleKeyFrame KeyTime="0" Value="0"/><EasingDoubleKeyFrame KeyTime="0:0:0.07" Value="-4"/><EasingDoubleKeyFrame KeyTime="0:0:0.14" Value="3"/><EasingDoubleKeyFrame KeyTime="0:0:0.21" Value="-2"/><EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+      </DoubleAnimationUsingKeyFrames>
+      <DoubleAnimation Storyboard.TargetName="VaultHalo" Storyboard.TargetProperty="Opacity" To="0.1" Duration="0:0:0.3"/>
+      <DoubleAnimation Storyboard.TargetName="KeyGlow" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.3"/>
+    </Storyboard>
+  </UserControl.Resources>
+  <Grid>
+    <Grid.RowDefinitions><RowDefinition Height="132"/><RowDefinition Height="24"/></Grid.RowDefinitions>
+    <Viewbox Stretch="Uniform"><Canvas Width="420" Height="188">
+      <Canvas.RenderTransform><TranslateTransform x:Name="Shake"/></Canvas.RenderTransform>
+      <Ellipse x:Name="VaultHalo" Canvas.Left="150" Canvas.Top="-3" Width="240" Height="196" Opacity="0.2">
+        <Ellipse.Fill><RadialGradientBrush><GradientStop Color="#87B9FF"/><GradientStop Color="#0087B9FF" Offset="1"/></RadialGradientBrush></Ellipse.Fill>
+      </Ellipse>
+      <Border Canvas.Left="198" Canvas.Top="12" Width="160" Height="164" Background="White" CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"/>
+      <Border Canvas.Left="206" Canvas.Top="20" Width="144" Height="148" Background="#153B79" CornerRadius="19">
+        <Grid>
+          <Border BorderBrush="#4671B1" BorderThickness="1" CornerRadius="12" Margin="12"/>
+          <StackPanel Margin="28,30" Opacity="0.35"><Border Background="#A9CCFF" CornerRadius="3" Height="6" Width="64" Margin="0,0,0,10"/><Border Background="#A9CCFF" CornerRadius="3" Height="6" Width="48" HorizontalAlignment="Left"/></StackPanel>
+          <Grid x:Name="OpenMark" Width="58" Height="58" Opacity="0" RenderTransformOrigin="0.5,0.5">
+            <Grid.RenderTransform><ScaleTransform x:Name="MarkScale"/></Grid.RenderTransform>
+            <Ellipse Fill="#77E8D1"/><Path Data="M16,29 L25,38 L42,20" Stroke="#153B79" StrokeThickness="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+          </Grid>
+        </Grid>
+      </Border>
+      <Grid Canvas.Left="206" Canvas.Top="20" Width="144" Height="148" RenderTransformOrigin="0,0.5">
+        <Grid.RenderTransform><TransformGroup><ScaleTransform x:Name="DoorSwing"/><SkewTransform x:Name="DoorSkew"/></TransformGroup></Grid.RenderTransform>
+        <Border CornerRadius="19" BorderBrush="#6CA9FF" BorderThickness="1">
+          <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#408CF4"/><GradientStop Color="#225BCB" Offset="0.6"/><GradientStop Color="#193F9B" Offset="1"/></LinearGradientBrush></Border.Background>
+          <Border CornerRadius="13" Margin="9" BorderBrush="#50FFFFFF" BorderThickness="1"/>
+        </Border>
+        <Canvas><Border Canvas.Left="-3" Canvas.Top="28" Width="9" Height="23" Background="#8BBCFF" CornerRadius="3"/><Border Canvas.Left="-3" Canvas.Top="98" Width="9" Height="23" Background="#8BBCFF" CornerRadius="3"/>
+          <Ellipse x:Name="KeyGlow" Canvas.Left="39" Canvas.Top="51" Width="46" Height="46" Fill="White" Opacity="0"/>
+          <Ellipse Canvas.Left="52" Canvas.Top="64" Width="20" Height="20" Fill="White"/>
+          <Path Data="M58,79 L56,94 Q62,98 68,94 L66,79 Z" Fill="White"/>
+          <Border Canvas.Left="108" Canvas.Top="61" Width="6" Height="27" Background="#A4CCFF" CornerRadius="3"/>
+        </Canvas>
+      </Grid>
+      <Grid x:Name="KeyShape" Canvas.Left="40" Canvas.Top="46" Width="150" Height="96">
+        <Grid.Effect><DropShadowEffect BlurRadius="3" ShadowDepth="1" Opacity="0.08" Color="#1E65C6"/></Grid.Effect>
+        <Grid.RenderTransform><TransformGroup><ScaleTransform x:Name="KeyTurn" CenterX="140" CenterY="48"/><RotateTransform x:Name="KeyTilt" CenterX="140" CenterY="48"/><TranslateTransform x:Name="KeyMove"/></TransformGroup></Grid.RenderTransform>
+        <Canvas>
+          <Canvas RenderTransform="1,0,0,1,0,2">
+            <Path Data="M38,44 H142 V53 H136 V64 H127 V53 H116 V64 H107 V53 H38 Z" Fill="#7892B3" Stroke="#4E6B90" StrokeThickness="1.4" StrokeLineJoin="Round"/>
+            <Path Data="F0 M44,48 A22,22 0 1 1 0,48 A22,22 0 1 1 44,48 Z M32,48 A10,10 0 1 1 12,48 A10,10 0 1 1 32,48 Z" Fill="#7892B3" Stroke="#4E6B90" StrokeThickness="1.4"/>
+          </Canvas>
+          <Path Data="M38,44 H142 V53 H136 V64 H127 V53 H116 V64 H107 V53 H38 Z" Fill="{StaticResource KeyMetal}" Stroke="#4E6B90" StrokeThickness="1.2" StrokeLineJoin="Round"/>
+          <Path Data="F0 M44,48 A22,22 0 1 1 0,48 A22,22 0 1 1 44,48 Z M32,48 A10,10 0 1 1 12,48 A10,10 0 1 1 32,48 Z" Fill="{StaticResource KeyMetal}" Stroke="#4E6B90" StrokeThickness="1.2"/>
+          <Path Data="M43,46 H138 M7,40 A17,17 0 0 1 29,33" Stroke="White" StrokeThickness="1.2" Opacity="0.9" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+        </Canvas>
+      </Grid>
+    </Canvas></Viewbox>
+    <TextBlock x:Name="Caption" Grid.Row="1" Text="마스터 비밀번호로 여는 나만의 금고" Style="{StaticResource MutedText}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.LiveSetting="Polite"/>
+  </Grid>
+</UserControl>

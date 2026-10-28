@@ -1,0 +1,16 @@
+bin/
+obj/
+Checks/bin/
+Checks/obj/
+*.solekey
+*.solekey.*
+**/bin/
+**/obj/
+**/artifacts/
+dist/
+.vs/
+*.user
+*.suo
+*.bak
+*.log
+Assets/solekey-ad-*.png
