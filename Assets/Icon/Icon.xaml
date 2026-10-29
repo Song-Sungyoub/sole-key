@@ -3,7 +3,16 @@
     <Rectangle Canvas.Left="12" Canvas.Top="12" Width="232" Height="232" RadiusX="54" RadiusY="54" Stroke="#5086EF" StrokeThickness="2">
       <Rectangle.Fill><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#408CF4" Offset="0"/><GradientStop Color="#225BCB" Offset="0.55"/><GradientStop Color="#193F9B" Offset="1"/></LinearGradientBrush></Rectangle.Fill>
     </Rectangle>
-    <Path Data="M 111,111 L 185,185 M 149,149 L 165,133 M 174,174 L 190,158" Stroke="White" StrokeThickness="20" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
-    <Ellipse Canvas.Left="56" Canvas.Top="56" Width="76" Height="76" Fill="#77E8D1" Stroke="White" StrokeThickness="19"/>
+    <Path Data="M111,115 L185,189 M149,153 L165,137 M174,178 L190,162" Stroke="#8B9BB4" StrokeThickness="23" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+    <Path Data="M111,111 L185,185 M149,149 L165,133 M174,174 L190,158" StrokeThickness="21" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round">
+      <Path.Stroke><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="White"/><GradientStop Color="#C6D0DD" Offset="0.42"/><GradientStop Color="#F8FAFF" Offset="0.6"/><GradientStop Color="#AEBBCD" Offset="1"/></LinearGradientBrush></Path.Stroke>
+    </Path>
+    <Ellipse Canvas.Left="55" Canvas.Top="60" Width="80" Height="80" Fill="#8B9BB4"/>
+    <Ellipse Canvas.Left="54" Canvas.Top="54" Width="80" Height="80" Stroke="#B0BECE" StrokeThickness="1">
+      <Ellipse.Fill><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="White"/><GradientStop Color="#D9E0EB" Offset="0.48"/><GradientStop Color="#FFFFFF" Offset="0.65"/><GradientStop Color="#AAB8CB" Offset="1"/></LinearGradientBrush></Ellipse.Fill>
+    </Ellipse>
+    <Ellipse Canvas.Left="72" Canvas.Top="72" Width="44" Height="44" Stroke="#5CCFBC" StrokeThickness="1">
+      <Ellipse.Fill><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#A1F7E8"/><GradientStop Color="#62E2CA" Offset="0.6"/><GradientStop Color="#39CBB3" Offset="1"/></LinearGradientBrush></Ellipse.Fill>
+    </Ellipse>
   </Canvas>
 </Viewbox>
