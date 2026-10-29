@@ -9,6 +9,8 @@ public sealed class VaultSettingsViewModel : ScreenModel
     private readonly SettingsManager settings;
     private string current = "", next = "", confirmation = "", restorePassword = "";
     private string autoLock, clipboardSeconds;
+    private bool autoLockEnabled;
+    public bool AutoLockEnabled { get => autoLockEnabled; set => Set(ref autoLockEnabled, value); }
     public string FilePath => vault.FilePath;
     public string AutoLockMinutes { get => autoLock; set => Set(ref autoLock, value); }
     public string ClipboardSeconds { get => clipboardSeconds; set => Set(ref clipboardSeconds, value); }
@@ -24,6 +26,7 @@ public sealed class VaultSettingsViewModel : ScreenModel
     public VaultSettingsViewModel(VaultManager vault, SettingsManager settings)
     {
         this.vault = vault; this.settings = settings;
+        autoLockEnabled = settings.Current.AutoLockEnabled;
         autoLock = settings.Current.AutoLockMinutes.ToString(); clipboardSeconds = settings.Current.ClipboardSeconds.ToString();
         BackupCommand = new(_ => Work(async () =>
         {
@@ -54,7 +57,7 @@ public sealed class VaultSettingsViewModel : ScreenModel
             {
                 if (!int.TryParse(AutoLockMinutes, out var minutes) || !int.TryParse(ClipboardSeconds, out var seconds))
                     throw new ArgumentException("시간을 정수로 입력하세요.");
-                var value = VaultData.Clone(settings.Current); value.AutoLockMinutes = minutes; value.ClipboardSeconds = seconds;
+                var value = VaultData.Clone(settings.Current); value.AutoLockEnabled = AutoLockEnabled; value.AutoLockMinutes = minutes; value.ClipboardSeconds = seconds;
                 settings.Save(value); Status = "설정 저장 완료";
             }
             catch (Exception ex) { Report(ex); }

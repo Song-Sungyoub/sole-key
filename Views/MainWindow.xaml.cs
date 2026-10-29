@@ -43,6 +43,6 @@ public partial class MainWindow : Window
     }
     private void SessionChanged(object sender, SessionSwitchEventArgs e)
     {
-        if (e.Reason == SessionSwitchReason.SessionLock) Dispatcher.Invoke(() => vm.RequestLock(true));
+        if (e.Reason == SessionSwitchReason.SessionLock) Dispatcher.Invoke(vm.OnSessionLocked);
     }
 }

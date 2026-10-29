@@ -25,7 +25,7 @@ public static class CryptoManager
     public const int MaxFileBytes = 16 * 1024 * 1024;
     public static void ValidateMaster(string password)
     {
-        if (password.Length is < 15 or > 128) throw new ArgumentException("마스터 비밀번호는 15~128자로 입력하세요.");
+        if (password.Length is < 8 or > 128) throw new ArgumentException("마스터 비밀번호는 8~128자로 입력하세요.");
     }
     public static VaultEnvelope Parse(byte[] bytes)
     {

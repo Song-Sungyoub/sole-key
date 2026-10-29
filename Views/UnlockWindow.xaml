@@ -8,7 +8,7 @@
         <CheckBox Content="새 금고 만들기" IsChecked="{Binding Create}" Margin="0,0,0,16"/>
         <TextBlock Text="금고 파일"/>
         <DockPanel><Button DockPanel.Dock="Right" Content="찾아보기" Command="{Binding BrowseCommand}" Margin="8,4,0,4"/><TextBox Text="{Binding FilePath, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="금고 파일 경로"/></DockPanel>
-        <DockPanel Margin="0,12,0,0"><TextBlock DockPanel.Dock="Right" Text="15~128자" Style="{StaticResource MutedText}" Visibility="{Binding Create, Converter={StaticResource BoolVisibility}}"/><TextBlock Text="마스터 비밀번호"/></DockPanel>
+        <DockPanel Margin="0,12,0,0"><TextBlock DockPanel.Dock="Right" Text="8~128자" Style="{StaticResource MutedText}" Visibility="{Binding Create, Converter={StaticResource BoolVisibility}}"/><TextBlock Text="마스터 비밀번호"/></DockPanel>
         <local:SecretInput Value="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <StackPanel Visibility="{Binding Create, Converter={StaticResource BoolVisibility}}">
           <TextBlock Text="비밀번호 확인" Margin="0,12,0,0"/><local:SecretInput Value="{Binding Confirmation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

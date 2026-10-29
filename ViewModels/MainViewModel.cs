@@ -93,7 +93,8 @@ public sealed class MainViewModel : ScreenModel
     }
     public void RecordInput() => lastInput = Environment.TickCount64;
     public void SetTrayState(bool hidden) { inTray = hidden; if (!hidden) RecordInput(); }
-    public void CheckIdle() { if (Active && !inTray && Environment.TickCount64 - lastInput >= settings.Current.AutoLockMinutes * 60000L) RequestLock(true); }
+    public void CheckIdle() { if (settings.Current.AutoLockEnabled && Active && !inTray && Environment.TickCount64 - lastInput >= settings.Current.AutoLockMinutes * 60000L) RequestLock(true); }
+    public void OnSessionLocked() { if (settings.Current.AutoLockEnabled) RequestLock(true); }
     public void RequestLock(bool forced)
     {
         if (!Active) return;

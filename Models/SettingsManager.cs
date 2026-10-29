@@ -5,6 +5,7 @@ namespace SoleKey.Models;
 public sealed class AppSettings
 {
     public string RecentFile { get; set; } = "";
+    public bool AutoLockEnabled { get; set; }
     public int AutoLockMinutes { get; set; } = 5;
     public int ClipboardSeconds { get; set; } = 30;
     public void Validate()

@@ -4,7 +4,9 @@
     <Border Style="{StaticResource Card}" Padding="22"><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel IsEnabled="{Binding Ready}">
       <TextBlock Text="금고 관리" Style="{StaticResource Heading}"/>
       <TextBlock Text="{Binding FilePath}" Style="{StaticResource MutedText}" Margin="0,0,0,16"/>
-      <TextBlock Text="자동 잠금 (1~60분)"/><TextBox Text="{Binding AutoLockMinutes, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" AutomationProperties.Name="자동 잠금 분"/>
+      <CheckBox Content="자동 잠금 사용" IsChecked="{Binding AutoLockEnabled}"/>
+      <TextBlock Text="끄면 미사용·Windows 화면 잠금 후에도 유지됩니다. 완전 종료·재부팅 후에는 다시 입력합니다." TextWrapping="Wrap" Style="{StaticResource MutedText}"/>
+      <TextBlock Text="자동 잠금 (1~60분)"/><TextBox IsEnabled="{Binding AutoLockEnabled}" Text="{Binding AutoLockMinutes, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" AutomationProperties.Name="자동 잠금 분"/>
       <TextBlock Text="클립보드 정리 (5~120초)"/><TextBox Text="{Binding ClipboardSeconds, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" AutomationProperties.Name="클립보드 정리 초"/>
       <Button Content="시간 설정 저장" Command="{Binding SaveSettingsCommand}" HorizontalAlignment="Right"/>
       <Separator Margin="0,14"/>
@@ -16,7 +18,7 @@
       <Separator Margin="0,14"/>
       <TextBlock Text="마스터 비밀번호 변경" Style="{StaticResource SectionTitle}" Margin="0,0,0,10"/>
       <TextBlock Text="현재 비밀번호"/><local:SecretInput Value="{Binding CurrentPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-      <TextBlock Text="새 비밀번호 (15~128자)"/><local:SecretInput Value="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+      <TextBlock Text="새 비밀번호 (8~128자)"/><local:SecretInput Value="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
       <TextBlock Text="새 비밀번호 확인"/><local:SecretInput Value="{Binding Confirmation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
       <Button Content="마스터 비밀번호 변경" Command="{Binding ChangePasswordCommand}" HorizontalAlignment="Right"/>
       <TextBlock Text="이전 백업은 변경 전 비밀번호로 열립니다. 비밀번호를 잊으면 복구할 수 없습니다." Style="{StaticResource MutedText}" Margin="0,8"/>

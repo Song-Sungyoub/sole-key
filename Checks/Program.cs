@@ -57,6 +57,23 @@ internal static class Program
     };
     private static void ModelChecks(string root)
     {
+        var prefsPath = Path.Combine(root, "prefs.json");
+        var prefs = new SettingsManager(prefsPath);
+        Check(!prefs.Current.AutoLockEnabled, "automatic locking defaults off");
+        prefs.Save(new AppSettings { AutoLockEnabled = true });
+        Check(new SettingsManager(prefsPath).Current.AutoLockEnabled, "automatic locking enabled persists");
+        prefs.Save(new AppSettings { AutoLockEnabled = false });
+        Check(!new SettingsManager(prefsPath).Current.AutoLockEnabled, "automatic locking disabled persists");
+        Throws<ArgumentException>(() => CryptoManager.ValidateMaster("1234567"), "seven-character master rejected");
+        CryptoManager.ValidateMaster("12345678");
+        Check(true, "eight-character master accepted");
+        using (var shortVault = new VaultManager()) {
+            var shortPath = Path.Combine(root, "eight.solekey");
+            shortVault.OpenAsync(shortPath, "12345678", true).GetAwaiter().GetResult();
+            shortVault.ChangePasswordAsync("12345678", "abcdefgh").GetAwaiter().GetResult();
+            shortVault.LockAsync().GetAwaiter().GetResult();
+            Check(shortVault.OpenAsync(shortPath, "abcdefgh", false).GetAwaiter().GetResult().Entries.Count == 0, "eight-character create change and reopen");
+        }
         var path = Path.Combine(root, "test.solekey"); var backup = Path.Combine(root, "backup.solekey");
         using var vault = new VaultManager();
         var watch = Stopwatch.StartNew();
@@ -183,7 +200,9 @@ internal static class Program
     }
     private static void UiChecks(string root)
     {
-        var app = new App(); app.InitializeComponent();
+        // UI checks load shared resources without starting the user's tray or single-instance session.
+        var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
+        app.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("/SoleKey;component/Views/SoleStyles.xaml", UriKind.Relative) });
         SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext());
         var settings = new SettingsManager(Path.Combine(root, "settings.json"));
         using var vault = new VaultManager(); using var clipboard = new ClipboardManager();
@@ -242,6 +261,8 @@ internal static class Program
         var settingsVM = new VaultSettingsViewModel(vault, settings);
         var settingsWindow = new VaultSettingsWindow(settingsVM); settingsWindow.Show(); Pump();
         Check(Descendants<SecretInput>(settingsWindow).Count() == 4, "settings screen loads secret inputs");
+        settingsVM.AutoLockEnabled = true; settingsVM.SaveSettingsCommand.Execute(null);
+        Check(settings.Current.AutoLockEnabled, "settings enabled state saves");
         settingsVM.AutoLockMinutes = "invalid"; settingsVM.SaveSettingsCommand.Execute(null);
         Check(settingsVM.Status.Contains("정수"), "invalid settings text rejected without saving prior value");
         Render(settingsWindow, "settings");
@@ -321,7 +342,7 @@ internal static class Program
         master.Password = "short"; confirmation.Password = "short"; Pump();
         Check(vm.Password == "short" && vm.Confirmation == "short", "password input events update create model");
         Invoke(create); WaitUntil(() => !vm.Busy);
-        Check(vm.Phase == UnlockPhase.Idle && vm.HasError && vm.Status.Contains("15~128") && prompts == 0 && !File.Exists(path), "short master rejected before animation prompt and file write");
+        Check(vm.Phase == UnlockPhase.Idle && vm.HasError && vm.Status.Contains("8~128") && prompts == 0 && !File.Exists(path), "short master rejected before animation prompt and file write");
         Check(master.Password == "short" && confirmation.Password == "short", "invalid creation retains both password inputs");
         master.Password = Master; confirmation.Password = NextMaster; Pump();
         Invoke(create); WaitUntil(() => !vm.Busy);
@@ -379,6 +400,12 @@ internal static class Program
         Check(!window.IsVisible, "minimize hides main window to tray");
         tray.Restore(); Pump();
         Check(window.IsVisible && window.WindowState == WindowState.Normal, "tray restores minimized window normally");
+        settings.Current.AutoLockEnabled = false;
+        typeof(MainViewModel).GetField("lastInput", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
+            .SetValue(vm, Environment.TickCount64 - 61 * 60000L);
+        vm.CheckIdle(); vm.OnSessionLocked();
+        Check(vm.Active, "disabled automatic lock preserves elapsed and Windows-locked session");
+        settings.Current.AutoLockEnabled = true;
         tray.Hide();
         typeof(MainViewModel).GetField("lastInput", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
             .SetValue(vm, Environment.TickCount64 - settings.Current.AutoLockMinutes * 60000L - 1000);
